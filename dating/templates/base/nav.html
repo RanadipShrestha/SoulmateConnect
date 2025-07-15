@@ -1,0 +1,153 @@
+<style>
+  .site-header {
+    background: #d6336c;
+    padding: 15px 0;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    position: sticky;
+    top: 0;
+    z-index: 100;
+  }
+
+  .site-header .container {
+    max-width: 1200px;
+    margin: 0 auto;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 20px;
+  }
+
+  .site-header .logo {
+    color: white;
+    font-size: 28px;
+    font-weight: bold;
+    text-decoration: none;
+  }
+
+  .site-header nav ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    gap: 20px;
+    align-items: center;
+  }
+
+  .site-header nav ul li {
+    display: inline-block;
+  }
+
+  .site-header nav ul li a,
+  .site-header nav ul li form button {
+    color: white;
+    text-decoration: none;
+    font-weight: 600;
+    font-size: 16px;
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 5px 0;
+  }
+
+  .site-header nav ul li a:hover,
+  .site-header nav ul li form button:hover {
+    text-decoration: underline;
+  }
+
+  .site-header nav ul li a[aria-current="page"] {
+    font-weight: bold;
+    color: #ffe4ee;
+  }
+
+  .user-initials-link {
+    background: #ffe4ee;
+    color: #b01e4c;
+    font-weight: bold;
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border: 2px solid #b01e4c;
+  }
+
+  @media (max-width: 768px) {
+    .site-header .container {
+      flex-direction: column;
+      align-items: flex-start;
+    }
+
+    .site-header nav ul {
+      flex-direction: column;
+      gap: 10px;
+      width: 100%;
+      margin-top: 15px;
+    }
+
+    .site-header nav ul li {
+      width: 100%;
+    }
+
+    .site-header nav ul li a,
+    .site-header nav ul li form button {
+      display: block;
+      padding: 8px 0;
+    }
+  }
+</style>
+
+<header class="site-header">
+  <div class="container">
+    <a href="{% url 'index' %}" class="logo">SoulConnect</a>
+    
+    <nav aria-label="Main navigation">
+      <ul>
+        <li>
+          <a href="{% url 'index' %}"
+             {% if request.resolver_match.url_name == 'index' %} aria-current="page"{% endif %}>
+            Home
+          </a>
+        </li>
+
+        {% if user.is_authenticated %}
+          <li>
+            <a href="{% url 'profiles' %}"
+               {% if request.resolver_match.url_name == 'profiles' %} aria-current="page"{% endif %}>
+              Profiles
+            </a>
+          </li>
+
+          <li>
+            <form method="POST" action="{% url 'logout' %}">
+              {% csrf_token %}
+              <button type="submit">Logout</button>
+            </form>
+          </li>
+
+          <li>
+            <a href="{% url 'my_profile' %}" 
+               class="user-initials-link" 
+               title="View Profile">
+              {{ user.first_name|default_if_none:""|slice:":1"|upper }}{{ user.last_name|default_if_none:""|slice:":1"|upper }}
+            </a>
+          </li>
+
+        {% else %}
+          <li>
+            <a href="{% url 'login' %}"
+               {% if request.resolver_match.url_name == 'login' %} aria-current="page"{% endif %}>
+              Login
+            </a>
+          </li>
+          <li>
+            <a href="{% url 'register' %}"
+               {% if request.resolver_match.url_name == 'register' %} aria-current="page"{% endif %}>
+              Register
+            </a>
+          </li>
+        {% endif %}
+      </ul>
+    </nav>
+  </div>
+</header>

@@ -1,0 +1,79 @@
+{% extends "base/base.html" %}
+{% load static %}
+{% block content %}
+<style>
+    .profile-container {
+        max-width: 600px;
+        margin: 40px auto;
+        background: #fff;
+        padding: 30px;
+        border-radius: 12px;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        font-family: 'Segoe UI', sans-serif;
+        text-align: center;
+    }
+
+    .profile-photo {
+        width: 120px;
+        height: 120px;
+        border-radius: 50%;
+        object-fit: cover;
+        border: 3px solid #d6336c;
+        margin-bottom: 20px;
+    }
+
+    .profile-container h2 {
+        color: #d6336c;
+        margin-bottom: 20px;
+    }
+
+    .profile-card p {
+        font-size: 16px;
+        line-height: 1.6;
+        color: #333;
+        margin-bottom: 10px;
+    }
+
+    .profile-card p strong {
+        color: #555;
+    }
+
+    .edit-button {
+        display: inline-block;
+        margin-top: 20px;
+        padding: 10px 20px;
+        background-color: #d6336c;
+        color: #fff;
+        border: none;
+        border-radius: 8px;
+        text-decoration: none;
+        font-weight: 500;
+        transition: background-color 0.3s ease;
+    }
+
+    .edit-button:hover {
+        background-color: #a2254f;
+    }
+</style>
+
+<div class="profile-container">
+    <!-- Profile Photo -->
+{% if user.userdetails.profile %}
+    <img src="{{ user.userdetails.profile.url }}" alt="Profile Picture" style="width: 150px; border-radius: 50%;">
+{% else %}
+    <img src="{% static 'images/profile-placeholder.png' %}" alt="Default Photo" style="width: 150px; border-radius: 50%;">
+{% endif %}
+    <!-- Profile Info -->
+    <h2>My Profile</h2>
+    <div class="profile-card">
+        <p><strong>Username:</strong> {{ user.username }}</p>
+        <p><strong>Email:</strong> {{ user.email }}</p>
+        <p><strong>First Name:</strong> {{ user.first_name }}</p>
+        <p><strong>Last Name:</strong> {{ user.last_name }}</p>
+        <p><strong>Date Joined:</strong> {{ user.date_joined|date:"F j, Y" }}</p>
+    </div>
+
+    <!-- Edit Profile Button -->
+    <a href="{% url 'edit_profile' %}" class="edit-button">Edit Profile</a>
+</div>
+{% endblock %}

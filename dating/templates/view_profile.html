@@ -1,0 +1,60 @@
+<head>
+    {% extends "base/base.html" %}
+{% load static %}
+
+{% block content %}
+</head>
+<style>
+    .profile-detail-container {
+        max-width: 800px;
+        margin: 2rem auto;
+        padding: 2rem;
+        background: #f9f9f9;
+        border-radius: 10px;
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+        display: flex;
+        gap: 2rem;
+        align-items: flex-start;
+    }
+
+    .profile-detail-img {
+        width: 200px;
+        border-radius: 10px;
+        object-fit: cover;
+    }
+
+    .profile-detail-info {
+        flex: 1;
+    }
+
+    .profile-detail-info h2 {
+        margin-top: 0;
+    }
+
+    .back-btn {
+        display: inline-block;
+        margin-top: 1rem;
+        padding: 0.5rem 1rem;
+        background-color: #6c757d;
+        color: white;
+        text-decoration: none;
+        border-radius: 5px;
+    }
+
+    .back-btn:hover {
+        background-color: #5a6268;
+    }
+</style>
+
+<div class="profile-detail-container">
+    <img src="{{ profile.profile.url }}" alt="{{ profile.user.username }}'s photo" class="profile-detail-img">
+    <div class="profile-detail-info">
+        <h2>{{ profile.user.username }}</h2>
+        <p><strong>Bio:</strong> {{ profile.bio }}</p>
+        <p><strong>City:</strong> {{ profile.city }}</p>
+        <p><strong>Gender:</strong> {{ profile.gender }}</p>
+        <!-- Add more fields if needed -->
+        <a href="{% url 'home' %}" class="back-btn">← Back</a>
+    </div>
+</div>
+{% endblock %}
