@@ -6,4 +6,6 @@ urlpatterns = [
     path("login/", loginPage, name="login"),
     path("aboutus/", aboutUs, name="aboutus"),
     path("match/",  matching_page, name="match"),
+    path("message/", message, name="message"),
+    path("conatctus/", contactUs, name="conatctus")
 ]

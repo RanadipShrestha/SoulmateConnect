@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect
 from .forms import UserCreateForm
-from .models import userDetails
+from .models import userDetails, Contact
 from django.contrib.auth import authenticate, login
 from django.contrib import messages
 # Create your views here.
@@ -64,7 +64,22 @@ def matching_page(request):
     
     profiles = userDetails.objects.exclude(user=request.user)
     return render(request, 'match.html', {'matching_profiles': profiles})
-   
+
+def message(request):
+    
+    return render(request, 'message.html')
 
 def aboutUs(request):
     return render(request, "aboutus.html")
+
+def contactUs(request):
+    if request.method == "POST":
+        name = request.POST.get("name")
+        email = request.POST.get("email")
+        subject = request.POST.get("subject")
+        message = request.POST.get("message")
+
+        Contact.objects.create(name=name, email=email, subject=subject, message=message)
+
+        return redirect('conatctus')
+    return render(request, "contact.html")

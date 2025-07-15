@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block content %}
+<section class="contact-section">
+    <div class="contact-container">
+        <h1>Contact Us</h1>
+        <p>If you have any questions, suggestions, or just want to say hello, we'd love to hear from you! Fill out the form below and we’ll get back to you as soon as possible.</p>
+        
+        <form method="post" class="contact-form">
+            {% csrf_token %}
+            <input type="text" name="name" placeholder="Your Name" required>
+            <input type="email" name="email" placeholder="Your Email" required>
+            <input type="text" name="subject" placeholder="Subject" required>
+            <textarea name="message" placeholder="Your Message" rows="6" required></textarea>
+            <button type="submit">Send Message</button>
+        </form>
+
+        <div class="contact-info">
+            <h2>Or reach us at:</h2>
+            <p><strong>Email:</strong> support@soulconnect.com</p>
+            <p><strong>Phone:</strong> +977-9800000000</p>
+            <p><strong>Location:</strong> Kathmandu, Nepal</p>
+        </div>
+    </div>
+</section>
+{% endblock content %}

@@ -21,3 +21,13 @@ class userDetails(models.Model):
     
     def __str__(self):
         return f"{self.user.username} - userDetails"
+    
+
+class Contact(models.Model):
+    name = models.CharField(max_length=50)
+    email = models.EmailField(max_length=254)
+    subject = models.CharField(max_length=50)
+    message = models.TextField()
+
+    def __str__(self):
+        return f'"{self.name}" send message with this "{self.subject}" subject'

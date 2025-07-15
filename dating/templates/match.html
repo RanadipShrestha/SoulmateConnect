@@ -1,99 +1,98 @@
-{% extends "base.html" %}
-{% load static %}
-
+{% extends "base.html" %} 
+{% load static %} 
 {% block content %}
 <style>
-/* Minimal clean matching page */
-:root {
-  --primary: #ff4d6d;
-  --success: #40c057;
-  --gray: #6c757d;
-}
+  /* Minimal clean matching page */
+  :root {
+    --primary: #ff4d6d;
+    --success: #40c057;
+    --gray: #6c757d;
+  }
 
-body {
-  background: #f8f9fa;
-}
+  body {
+    background: #f8f9fa;
+  }
 
-.container {
-  max-width: 800px;
-  margin: 50px auto;
-  text-align: center;
-}
+  .match-container {
+    max-width: 800px;
+    margin: 50px auto;
+    text-align: center;
+  }
 
-.profile-card {
-  background: white;
-  border-radius: 15px;
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
-  overflow: hidden;
-  padding: 20px;
-  margin-bottom: 30px;
-  transition: transform 0.5s ease, opacity 0.5s ease;
-}
+  .profile-card {
+    background: white;
+    border-radius: 15px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+    padding: 20px;
+    margin-bottom: 30px;
+    transition: transform 0.5s ease, opacity 0.5s ease;
+  }
 
-.profile-card img {
-  width: 100%;
-  height: 400px;
-  object-fit: cover;
-  border-radius: 10px;
-}
+  .profile-card img {
+    width: 100%;
+    height: 400px;
+    object-fit: cover;
+    border-radius: 10px;
+  }
 
-.profile-name {
-  font-size: 1.5rem;
-  font-weight: 700;
-  margin-top: 15px;
-}
+  .profile-name {
+    font-size: 1.5rem;
+    font-weight: 700;
+    margin-top: 15px;
+  }
 
-.profile-bio {
-  color: #555;
-  margin: 10px 0 20px;
-}
+  .profile-bio {
+    color: #555;
+    margin: 10px 0 20px;
+  }
 
-.buttons {
-  display: flex;
-  justify-content: center;
-  gap: 20px;
-}
+  .buttons {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+  }
 
-.btn-like, .btn-reject {
-  padding: 12px 20px;
-  border: none;
-  border-radius: 8px;
-  font-size: 1rem;
-  cursor: pointer;
-  transition: all 0.3s ease;
-}
+  .btn-like,
+  .btn-reject {
+    padding: 12px 20px;
+    border: none;
+    border-radius: 8px;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+  }
 
-.btn-like {
-  background: var(--success);
-  color: white;
-}
+  .btn-like {
+    background: var(--success);
+    color: white;
+  }
 
-.btn-reject {
-  background: var(--gray);
-  color: white;
-}
+  .btn-reject {
+    background: var(--gray);
+    color: white;
+  }
 
-.btn-like:hover {
-  transform: scale(1.1);
-}
+  .btn-like:hover {
+    transform: scale(1.1);
+  }
 
-.btn-reject:hover {
-  transform: scale(1.1);
-}
+  .btn-reject:hover {
+    transform: scale(1.1);
+  }
 
-.hidden {
-  display: none;
-}
-
+  .hidden {
+    display: none;
+  }
 </style>
 
-<div class="container">
+<div class="match-container">
   <h2>Find Your Match 💖</h2>
 
   <div id="profile-container">
     {% for user in matching_profiles %}
     <div class="profile-card">
-      <img src="{{ user.profile.url }}" alt="Profile Picture">
+      <img src="{{ user.profile.url }}" alt="Profile Picture" />
       <h3 class="profile-name">{{ user.user.username }}</h3>
       <p class="profile-bio">{{ user.bio|truncatechars:100 }}</p>
       <div class="buttons">
@@ -108,28 +107,28 @@ body {
 </div>
 
 <script>
-// Tinder-like swiping
-let currentIndex = 0;
-const profiles = document.querySelectorAll('.profile-card');
+  // Tinder-like swiping
+  let currentIndex = 0;
+  const profiles = document.querySelectorAll(".profile-card");
 
-function showProfile(index) {
-  profiles.forEach((profile, idx) => {
-    profile.classList.toggle('hidden', idx !== index);
-  });
-}
+  function showProfile(index) {
+    profiles.forEach((profile, idx) => {
+      profile.classList.toggle("hidden", idx !== index);
+    });
+  }
 
-function likeProfile() {
-  profiles[currentIndex].classList.add('hidden');
-  currentIndex++;
+  function likeProfile() {
+    profiles[currentIndex].classList.add("hidden");
+    currentIndex++;
+    showProfile(currentIndex);
+  }
+
+  function rejectProfile() {
+    profiles[currentIndex].classList.add("hidden");
+    currentIndex++;
+    showProfile(currentIndex);
+  }
+
   showProfile(currentIndex);
-}
-
-function rejectProfile() {
-  profiles[currentIndex].classList.add('hidden');
-  currentIndex++;
-  showProfile(currentIndex);
-}
-
-showProfile(currentIndex);
 </script>
 {% endblock %}

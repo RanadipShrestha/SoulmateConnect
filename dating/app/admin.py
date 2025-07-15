@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import userDetails
+from .models import userDetails, Contact
 # Register your models here.
 
 class UserDetailsAdmin(admin.ModelAdmin):
@@ -7,3 +7,4 @@ class UserDetailsAdmin(admin.ModelAdmin):
     search_feilds = ('user_username', 'phone_numebr')
 
 admin.site.register(userDetails, UserDetailsAdmin),
+admin.site.register(Contact)
