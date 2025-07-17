@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import userDetails, Contact
+from .models import userDetails, Contact, FAQ
 # Register your models here.
 
 class UserDetailsAdmin(admin.ModelAdmin):
@@ -8,3 +8,4 @@ class UserDetailsAdmin(admin.ModelAdmin):
 
 admin.site.register(userDetails, UserDetailsAdmin),
 admin.site.register(Contact)
+admin.site.register(FAQ)

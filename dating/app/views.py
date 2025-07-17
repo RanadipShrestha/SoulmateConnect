@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect
 from .forms import UserCreateForm
-from .models import userDetails, Contact
+from .models import userDetails, Contact, FAQ
 from django.contrib.auth import authenticate, login
 from django.contrib import messages
 # Create your views here.
@@ -73,6 +73,7 @@ def aboutUs(request):
     return render(request, "aboutus.html")
 
 def contactUs(request):
+    faqs = FAQ.objects.all()
     if request.method == "POST":
         name = request.POST.get("name")
         email = request.POST.get("email")
@@ -80,6 +81,31 @@ def contactUs(request):
         message = request.POST.get("message")
 
         Contact.objects.create(name=name, email=email, subject=subject, message=message)
-
         return redirect('conatctus')
-    return render(request, "contact.html")
+    context={
+        "faqs": faqs 
+    }
+    return render(request, "contact.html", context)
+
+
+from django.shortcuts import render, redirect, get_object_or_404
+from django.contrib.auth.decorators import login_required
+from django.contrib.auth.models import User  # ✅ ADD THIS
+from .models import Like, Match
+
+@login_required
+def like_user(request, user_id):
+    to_user = get_object_or_404(User, id=user_id)
+    from_user = request.user
+
+    # Check if already liked
+    like, created = Like.objects.get_or_create(from_user=from_user, to_user=to_user)
+
+    # Check for mutual like
+    if Like.objects.filter(from_user=to_user, to_user=from_user).exists():
+        # Avoid duplicate match
+        if not Match.objects.filter(user1=from_user, user2=to_user).exists() and not Match.objects.filter(user1=to_user, user2=from_user).exists():
+            Match.objects.create(user1=from_user, user2=to_user)
+
+    return redirect('matching_page')
+

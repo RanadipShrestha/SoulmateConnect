@@ -31,3 +31,33 @@ class Contact(models.Model):
 
     def __str__(self):
         return f'"{self.name}" send message with this "{self.subject}" subject'
+
+class FAQ(models.Model):
+    question = models.TextField()
+    answer = models.TextField()
+
+    def __str__(self):
+        return self.question
+
+
+from django.db import models
+from django.contrib.auth.models import User
+
+class Like(models.Model):
+    from_user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='liker')
+    to_user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='liked')
+    timestamp = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        unique_together = ('from_user', 'to_user')  # prevent duplicate likes
+
+    def __str__(self):
+        return f"{self.from_user} liked {self.to_user}"
+
+class Match(models.Model):
+    user1 = models.ForeignKey(User, on_delete=models.CASCADE, related_name='matches1')
+    user2 = models.ForeignKey(User, on_delete=models.CASCADE, related_name='matches2')
+    timestamp = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f"Match between {self.user1} and {self.user2}"

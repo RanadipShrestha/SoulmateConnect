@@ -2,5 +2,19 @@
 {% load static %}
 
 {% block content %}
-This is my message section
+<h2>Your Matches</h2>
+<ul>
+    {% for match in matches %}
+        <li>
+            {% if match.user1 == request.user %}
+                {{ match.user2.username }}
+            {% else %}
+                {{ match.user1.username }}
+            {% endif %}
+        </li>
+    {% empty %}
+        <li>No matches yet.</li>
+    {% endfor %}
+</ul>
+
 {% endblock content %}
