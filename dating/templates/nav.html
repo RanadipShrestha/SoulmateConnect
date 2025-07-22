@@ -68,7 +68,14 @@
                     <li><a href="{% url 'message' %}"> Message </a></li>
                     <li><a href="{% url 'aboutus' %}">about Us</a></li>
                     <li><a href="{% url 'conatctus' %}"> Contact Us </a></li>
+                    {% if user.is_authenticated %}
+
+                    <li><a href=""> 
+                        {{ user.first_name|slice:":1 " }} {{ user.last_name|slice:":1"}}
+                    </a></li>
+                    {% else %}
                     <li><a href="{% url 'login' %}">Login</a></li>
+                    {% endif %}
                 </ul>
             </nav>
         </div>

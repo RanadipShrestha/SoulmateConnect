@@ -131,3 +131,10 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 # https://docs.djangoproject.com/en/5.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+# Redirect unauthenticated users to this URL when using @login_required
+LOGIN_URL = '/login/'
+
+# Where to redirect users after successful login (optional)
+LOGIN_REDIRECT_URL = '/'
+    

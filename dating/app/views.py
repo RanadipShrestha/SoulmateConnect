@@ -1,12 +1,16 @@
 from django.shortcuts import render, redirect
 from .forms import UserCreateForm
-from .models import userDetails, Contact, FAQ
+from .models import userDetails, Contact, FAQ, Home
 from django.contrib.auth import authenticate, login
 from django.contrib import messages
-# Create your views here.
+from django.contrib.auth.decorators import login_required
 
 def index(request):
-    return render(request, 'index.html')
+    homes = Home.objects.all()
+    context ={
+        'homes':homes
+    }
+    return render(request, 'index.html',context)
 
 def registerPage(request):
     if request.method == "POST":
@@ -60,11 +64,12 @@ def loginPage(request):
 
 def matching_page(request):
     if not request.user.is_authenticated:
-        return redirect('login')  # Redirect to login page if user not logged in
+        return redirect('login')  
     
     profiles = userDetails.objects.exclude(user=request.user)
     return render(request, 'match.html', {'matching_profiles': profiles})
 
+@login_required
 def message(request):
     
     return render(request, 'message.html')
@@ -89,8 +94,8 @@ def contactUs(request):
 
 
 from django.shortcuts import render, redirect, get_object_or_404
-from django.contrib.auth.decorators import login_required
-from django.contrib.auth.models import User  # ✅ ADD THIS
+
+from django.contrib.auth.models import User  
 from .models import Like, Match
 
 @login_required
