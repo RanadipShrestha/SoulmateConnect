@@ -60,8 +60,8 @@
   }
 
   .user-initials-link {
-    background: #ffe4ee;
-    color: #b01e4c;
+    background: #6f6267;
+    color: #debac5;
     font-weight: bold;
     width: 36px;
     height: 36px;
@@ -100,7 +100,7 @@
 <header class="site-header">
   <div class="container">
     <a href="{% url 'index' %}" class="logo">SoulConnect</a>
-    
+
     <nav aria-label="Main navigation">
       <ul>
         <li>
@@ -115,6 +115,20 @@
             <a href="{% url 'profiles' %}"
                {% if request.resolver_match.url_name == 'profiles' %} aria-current="page"{% endif %}>
               Profiles
+            </a>
+          </li>
+
+          <li>
+            <a href="{% url 'my_matches' %}"
+               {% if request.resolver_match.url_name == 'my_matches' %} aria-current="page"{% endif %}>
+              My Matches
+            </a>
+          </li>
+
+          <li>
+            <a href="{% url 'conversations' %}"
+               {% if request.resolver_match.url_name == 'conversations' %} aria-current="page"{% endif %}>
+              Messages
             </a>
           </li>
 

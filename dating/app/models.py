@@ -1,5 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import User
+
 # Create your models here.
 
 
@@ -21,3 +22,30 @@ class UserDetails(models.Model):
     
     def __str__(self):
         return f"{self.user.username} - UserDetails"
+
+    
+class Like(models.Model):
+    from_user = models.ForeignKey(User, related_name='likes_sent', on_delete=models.CASCADE)
+    to_user = models.ForeignKey(User, related_name='likes_received', on_delete=models.CASCADE)
+    timestamp = models.DateTimeField(auto_now_add=True)
+
+class Meta:
+    unique_together = ('from_user', 'to_user')
+
+class Match(models.Model):
+    user1 = models.ForeignKey(User, related_name='matches1', on_delete=models.CASCADE)
+    user2 = models.ForeignKey(User, related_name='matches2', on_delete=models.CASCADE)
+    matched_on = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        unique_together = ('user1', 'user2')
+
+class Message(models.Model):
+    sender = models.ForeignKey(User, related_name='sent_messages', on_delete=models.CASCADE)
+    recipient = models.ForeignKey(User, related_name='received_messages', on_delete=models.CASCADE)
+    content = models.TextField()
+    timestamp = models.DateTimeField(auto_now_add=True)
+    is_read = models.BooleanField(default=False)
+
+    def __str__(self):
+        return f"From {self.sender} to {self.recipient}: {self.content[:30]}"

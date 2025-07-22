@@ -2,6 +2,16 @@ from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User
 from django import forms
 from .models import UserDetails
+from .models import Message
+
+class MessageForm(forms.ModelForm):
+    class Meta:
+        model = Message
+        fields = ['content']
+        widgets = {
+            'content': forms.Textarea(attrs={'rows': 3, 'placeholder': 'Type your message...'}),
+        }
+
 
 class UserCreateForm(UserCreationForm):
     class Meta:
@@ -12,6 +22,9 @@ class ProfileEditForm(forms.ModelForm):
     class Meta:
         model = User
         fields = ['username', 'first_name', 'last_name', 'email']
+        help_texts = {
+            'username': None,  # This removes the default help text
+        }
         widgets = {
             'username': forms.TextInput(attrs={'class': 'form-control'}),
             'first_name': forms.TextInput(attrs={'class': 'form-control'}),

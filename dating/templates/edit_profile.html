@@ -1,9 +1,69 @@
 {% extends "base/base.html" %}
 {% load static %}
-{% block content %}
 
-<div class="profile-container">
-    <h2>Edit Profile</h2>
+{% block content %}
+<style>
+    .card {
+        max-width: 600px;
+        margin: 40px auto;
+        padding: 30px;
+        background-color: #fff;
+        border-radius: 12px;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    }
+
+    .card h2 {
+        margin-bottom: 20px;
+        font-size: 24px;
+        border-bottom: 2px solid #eee;
+        padding-bottom: 10px;
+    }
+
+    .card h4 {
+        margin-top: 30px;
+        font-size: 18px;
+        color: #333;
+    }
+
+    form p {
+        margin-bottom: 15px;
+    }
+
+    form label {
+        font-weight: 600;
+        display: block;
+        margin-bottom: 5px;
+    }
+
+    form input,
+    form textarea,
+    form select {
+        width: 100%;
+        padding: 10px;
+        border: 1px solid #ccc;
+        border-radius: 6px;
+        font-size: 14px;
+    }
+
+    button[type="submit"] {
+        margin-top: 20px;
+        padding: 10px 20px;
+        font-size: 16px;
+        background-color: #4CAF50;
+        color: #fff;
+        border: none;
+        border-radius: 6px;
+        cursor: pointer;
+        transition: background-color 0.3s ease;
+    }
+
+    button[type="submit"]:hover {
+        background-color: #45a049;
+    }
+</style>
+
+<div class="card">
+    <!-- <h2>Edit Profile</h2> -->
 
     <form method="post" enctype="multipart/form-data">
         {% csrf_token %}
@@ -11,11 +71,9 @@
         <h4>Account Information</h4>
         {{ user_form.as_p }}
 
-        <h4>Profile Details</h4>
         {{ details_form.as_p }}
 
         <button type="submit">Save Changes</button>
     </form>
 </div>
-
 {% endblock %}

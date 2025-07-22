@@ -10,12 +10,37 @@ from django.contrib.auth.decorators import login_required
 from django.shortcuts import redirect
 from django.views.decorators.http import require_POST
 from .forms import UserDetailsEditForm, ProfileEditForm
+from .models import Like, Match
+from django.db.models import Q
+from .forms import MessageForm
+from .models import Message
+
+@login_required
+def like_user(request, user_id):
+    from_user = request.user
+    to_user = get_object_or_404(User, id=user_id)
+
+    # Prevent duplicate likes
+    if Like.objects.filter(from_user=from_user, to_user=to_user).exists():
+        messages.info(request, "You already liked this user.")
+        return redirect('profiles')
+
+    # Save the like
+    Like.objects.create(from_user=from_user, to_user=to_user)
+
+    # Check for mutual like
+    if Like.objects.filter(from_user=to_user, to_user=from_user).exists():
+        user_ids = sorted([from_user.id, to_user.id])
+        if not Match.objects.filter(user1_id=user_ids[0], user2_id=user_ids[1]).exists():
+            Match.objects.create(user1_id=user_ids[0], user2_id=user_ids[1])
+            messages.success(request, "It's a match!")
+
+    else:
+        messages.success(request, "You liked this user.")
+
+    return redirect('profiles')
 
 
-@require_POST
-def logout_view(request):
-    logout(request)
-    return redirect('index')
 
 def index(request):
     return render(request, 'index.html')
@@ -70,7 +95,7 @@ def loginPage(request):
 
 
 def profiles_view(request):
-    profiles = UserDetails.objects.select_related('user').all()
+    profiles = UserDetails.objects.select_related('user').exclude(user=request.user)
     return render(request, 'profiles.html', {'profiles': profiles})
 
 @login_required
@@ -98,4 +123,69 @@ def edit_profile(request):
     return render(request, 'edit_profile.html', {
         'user_form': user_form,
         'details_form': details_form,
+    })
+
+@require_POST
+def logout_view(request):
+    logout(request)
+    return redirect('index')
+
+@login_required
+def my_matches(request):
+    user = request.user
+    matches = Match.objects.filter(user1=user) | Match.objects.filter(user2=user)
+    matched_users = []
+
+    for match in matches:
+        matched_users.append(match.user2 if match.user1 == user else match.user1)
+
+    return render(request, 'my_matches.html', {'matched_users': matched_users})
+
+@login_required
+def conversations(request):
+    user = request.user
+    # Get users matched with the current user
+    matches = Match.objects.filter(Q(user1=user) | Q(user2=user))
+    matched_users = []
+    for match in matches:
+        matched_users.append(match.user2 if match.user1 == user else match.user1)
+
+    return render(request, 'conversations.html', {'matched_users': matched_users})
+
+
+@login_required
+def chat_view(request, user_id):
+    user = request.user
+    other_user = get_object_or_404(User, id=user_id)
+
+    # Check if they are matched
+    matched = Match.objects.filter(
+        Q(user1=user, user2=other_user) | Q(user1=other_user, user2=user)
+    ).exists()
+
+    if not matched:
+        return redirect('conversations')  # not allowed
+
+    messages = Message.objects.filter(
+        Q(sender=user, recipient=other_user) | Q(sender=other_user, recipient=user)
+    ).order_by('timestamp')
+
+    # Mark received messages as read
+    Message.objects.filter(sender=other_user, recipient=user, is_read=False).update(is_read=True)
+
+    if request.method == 'POST':
+        form = MessageForm(request.POST)
+        if form.is_valid():
+            message = form.save(commit=False)
+            message.sender = user
+            message.recipient = other_user
+            message.save()
+            return redirect('chat_view', user_id=other_user.id)
+    else:
+        form = MessageForm()
+
+    return render(request, 'chat.html', {
+        'other_user': other_user,
+        'messages': messages,
+        'form': form,
     })

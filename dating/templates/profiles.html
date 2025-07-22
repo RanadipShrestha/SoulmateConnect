@@ -110,7 +110,7 @@
 
     {% if profiles %}
         {% for profile in profiles %}
-        <div class="profile-card {% if forloop.first == False %}hidden{% endif %}" id="profile-{{ forloop.counter0 }}">
+        <div class="profile-card {% if not forloop.first %}hidden{% endif %}" id="profile-{{ forloop.counter0 }}" data-user-id="{{ profile.user.id }}">
             <div class="profile-img-container">
                 <img src="{{ profile.profile.url }}" alt="{{ profile.user.username }}" class="profile-img">
             </div>
@@ -125,8 +125,12 @@
 
         <div class="reaction-buttons">
             <button class="dislike-btn" onclick="nextProfile()">Dislike</button>
-            <button class="like-btn" onclick="nextProfile()">Like</button>
+            <button class="like-btn" onclick="likeCurrentProfile()">Like</button>
         </div>
+
+        <form id="like-form" action="" method="POST" style="display: none;">
+            {% csrf_token %}
+        </form>
     {% else %}
         <p>No profiles found.</p>
     {% endif %}
@@ -144,6 +148,14 @@
         } else {
             alert("You've viewed all profiles!");
         }
+    }
+
+    function likeCurrentProfile() {
+        const profileCard = profiles[currentIndex];
+        const userId = profileCard.dataset.userId;
+        const form = document.getElementById('like-form');
+        form.action = `/like/${userId}/`;
+        form.submit();
     }
 </script>
 </body>
