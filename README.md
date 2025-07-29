@@ -31,14 +31,6 @@ A full-featured dating platform built with **Django**, designed to connect users
 git clone 
 cd django-dating-site
 ```
-# Delete the virtual environement
-```
-# for Windows
-rmdir /s /q env
-
-# for Linux / macOS Terminal:
-rm -rf env
-```
 # Create virtual environment
 ```
 python -m venv env
