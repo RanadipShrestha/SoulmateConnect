@@ -14,7 +14,7 @@ def index(request):
 
 def registerPage(request):
     if request.method == "POST":
-        form = UserCreateForm(request.POST, request.FILES)  # Include request.FILES for profile pic
+        form = UserCreateForm(request.POST, request.FILES)
         if form.is_valid():
             user = form.save(commit=False)
             user.first_name = request.POST.get("first_name")
@@ -23,7 +23,6 @@ def registerPage(request):
             user.username = request.POST.get("username")
             user.save()
 
-            # Save additional user details
             bio = request.POST.get("bio")
             dob = request.POST.get("dob")
             profile = request.FILES.get("profile")
@@ -94,7 +93,6 @@ def contactUs(request):
 
 
 from django.shortcuts import render, redirect, get_object_or_404
-
 from django.contrib.auth.models import User  
 from .models import Like, Match
 
@@ -103,12 +101,10 @@ def like_user(request, user_id):
     to_user = get_object_or_404(User, id=user_id)
     from_user = request.user
 
-    # Check if already liked
     like, created = Like.objects.get_or_create(from_user=from_user, to_user=to_user)
 
-    # Check for mutual like
     if Like.objects.filter(from_user=to_user, to_user=from_user).exists():
-        # Avoid duplicate match
+
         if not Match.objects.filter(user1=from_user, user2=to_user).exists() and not Match.objects.filter(user1=to_user, user2=from_user).exists():
             Match.objects.create(user1=from_user, user2=to_user)
 
