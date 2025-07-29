@@ -1,21 +1,62 @@
 {% extends 'base/base.html' %}
 {% block content %}
-<h2 style="margin-bottom: 20px; color: #d6336c;">Your Matches</h2>
+<style>
+  .matches-container {
+    max-width: 600px;
+    margin: 2rem auto;
+  }
 
-{% if matched_users %}
-    <ul style="list-style: none; padding: 0; max-width: 400px;">
-        {% for user in matched_users %}
-            <li style="margin-bottom: 10px;">
-                <a href="{% url 'chat_view' user.id %}" 
-                   style="text-decoration: none; padding: 10px 15px; 
-                          display: block; border-radius: 8px; background-color: #f8d7da; 
-                          color: #721c24; font-weight: 600; transition: background-color 0.3s;">
-                    {{ user.username }}
-                </a>
-            </li>
-        {% endfor %}
-    </ul>
-{% else %}
-    <p style="color: #666; font-style: italic;">You have no matches yet. Keep swiping!</p>
-{% endif %}
+  .matches-container h2 {
+    text-align: center;
+    margin-bottom: 1.5rem;
+    color: #d6336c;
+  }
+
+  .match-list {
+    list-style: none;
+    padding: 0;
+  }
+
+  .match-list li {
+    background: #fff;
+    border: 1px solid #ddd;
+    border-radius: 12px;
+    margin-bottom: 12px;
+    padding: 15px 20px;
+    transition: background-color 0.3s ease;
+  }
+
+  .match-list li a {
+    text-decoration: none;
+    color: #333;
+    font-weight: 600;
+    font-size: 1.1rem;
+    display: block;
+  }
+
+  .match-list li:hover {
+    background-color: #f8d7e0;
+  }
+
+  .no-matches {
+    text-align: center;
+    color: #999;
+    font-style: italic;
+  }
+</style>
+
+<div class="matches-container">
+  <h2>Your Matches</h2>
+  <ul class="match-list">
+    {% for user in matched_users %}
+      <li>
+        <a href="{% url 'chat_view' user.id %}">
+          {{ user.username }}
+        </a>
+      </li>
+    {% empty %}
+      <li class="no-matches">You have no matches yet. Keep swiping!</li>
+    {% endfor %}
+  </ul>
+</div>
 {% endblock %}

@@ -35,6 +35,7 @@
 
   .site-header nav ul li {
     display: inline-block;
+    position: relative;
   }
 
   .site-header nav ul li a,
@@ -72,6 +73,18 @@
     border: 2px solid #b01e4c;
   }
 
+  .notification-badge {
+    background-color: #ffc107;
+    color: black;
+    border-radius: 12px;
+    padding: 2px 6px;
+    font-size: 12px;
+    font-weight: bold;
+    position: absolute;
+    top: -5px;
+    right: -10px;
+  }
+
   @media (max-width: 768px) {
     .site-header .container {
       flex-direction: column;
@@ -93,6 +106,12 @@
     .site-header nav ul li form button {
       display: block;
       padding: 8px 0;
+    }
+
+    .notification-badge {
+      position: static;
+      display: inline-block;
+      margin-left: 5px;
     }
   }
 </style>
@@ -131,6 +150,17 @@
               Messages
             </a>
           </li>
+
+          <li>
+            <a href="{% url 'notifications' %}"
+              {% if request.resolver_match.url_name == 'notifications' %} aria-current="page"{% endif %}>
+              Notifications
+              {% if unread_count > 0 %}
+                <span class="notification-badge">{{ unread_count }}</span>
+              {% endif %}
+            </a>
+          </li>
+
 
           <li>
             <form method="POST" action="{% url 'logout' %}">

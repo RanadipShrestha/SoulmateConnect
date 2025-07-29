@@ -49,3 +49,13 @@ class Message(models.Model):
 
     def __str__(self):
         return f"From {self.sender} to {self.recipient}: {self.content[:30]}"
+
+class Notification(models.Model):
+    recipient = models.ForeignKey(User, on_delete=models.CASCADE, related_name='notifications')
+    sender = models.ForeignKey(User, on_delete=models.CASCADE, related_name='sent_notifications')
+    message = models.TextField()
+    is_read = models.BooleanField(default=False)
+    timestamp = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f"{self.sender} → {self.recipient}: {self.message[:20]}"

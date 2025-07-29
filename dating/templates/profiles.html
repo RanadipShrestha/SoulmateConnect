@@ -87,6 +87,14 @@
             display: none;
         }
 
+        .no-profiles-message {
+            font-weight: bold;
+            font-size: 1.2rem;
+            margin-top: 2rem;
+            color: #555;
+            text-align: center;
+        }
+
         @media screen and (max-width: 768px) {
             .profile-card {
                 flex-direction: column;
@@ -134,11 +142,14 @@
     {% else %}
         <p>No profiles found.</p>
     {% endif %}
+
+    <p id="no-profiles-message" class="no-profiles-message" style="display:none;">No more profiles left.</p>
 </section>
 
 <script>
     let currentIndex = 0;
     const profiles = document.querySelectorAll('.profile-card');
+    const noProfilesMessage = document.getElementById('no-profiles-message');
 
     function nextProfile() {
         if (currentIndex < profiles.length - 1) {
@@ -146,7 +157,7 @@
             currentIndex++;
             profiles[currentIndex].classList.remove('hidden');
         } else {
-            alert("You've viewed all profiles!");
+            noProfilesMessage.style.display = 'block';
         }
     }
 
