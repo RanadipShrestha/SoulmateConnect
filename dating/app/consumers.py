@@ -28,18 +28,15 @@ class ChatConsumer(AsyncWebsocketConsumer):
         sender_id = self.user.id
         receiver_id = int(self.receiver_id)
 
-        # Save message to database
         await sync_to_async(Message.objects.create)(
             sender_id=sender_id,
             receiver_id=receiver_id,
             content=message
         )
 
-        # Get the last message's timestamp asynchronously
         last_message = await sync_to_async(lambda: Message.objects.last())()
         timestamp = last_message.timestamp.isoformat() if last_message else None
 
-        # Send message to room group
         await self.channel_layer.group_send(
             self.room_group_name,
             {
