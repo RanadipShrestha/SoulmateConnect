@@ -1,14 +1,56 @@
-<head>
 {% extends "base/base.html" %}
 {% load static %}
-{%block content%}
-</head>
-<body>
 
+{% block content %}
 <section class="hero-section">
-    <h1>Welcome to Find Your Match</h1>
-    <p>Join our vibrant community and start your journey to find your perfect match. Whether you're looking for friendship, love, or something in between, we connect hearts worldwide.</p>
-    <a href="{% url 'register' %}" class="cta-btn">Get Started</a>
+    <div class="overlay"></div>
+    <div class="hero-content">
+        <h1>Welcome to <span>Find Your Match</span></h1>
+        <p>Join our vibrant community and start your journey to find your perfect match.  
+           Whether you're looking for friendship, love, or something in between,  
+           we connect hearts worldwide.</p>
+        <div class="cta-buttons">
+            <a href="{% url 'register' %}" class="cta-btn">Get Started</a>
+            <a href="{% url 'login' %}" class="secondary-btn">Sign In</a>
+        </div>
+    </div>
 </section>
 
-{%endblock%}
+<section class="how-it-works">
+    <h2>How It Works</h2>
+    <div class="steps">
+        <div class="step">
+            <span>1</span>
+            <h3>Create Your Profile</h3>
+            <p>Sign up, add your photos, and share what makes you unique.</p>
+        </div>
+        <div class="step">
+            <span>2</span>
+            <h3>Get Matches</h3>
+            <p>Our smart algorithm connects you with like-minded people.</p>
+        </div>
+        <div class="step">
+            <span>3</span>
+            <h3>Start Chatting</h3>
+            <p>Send messages, share moments, and plan your first date.</p>
+        </div>
+    </div>
+</section>
+
+<section class="success-stories">
+    <h2>Success Stories 💍</h2>
+    <div class="stories">
+        <div class="story">
+            <img src="{% static 'images/couple1.jpg' %}" alt="Couple 1">
+            <p>"We matched in January and got engaged in December! We share the same values and life goals."</p>
+            <small>— Sarah & Mike</small>
+        </div>
+        <div class="story">
+            <img src="{% static 'images/couple2.jpg' %}" alt="Couple 2">
+            <p>"After years of searching, I found my husband here in just 2 months."</p>
+            <small>— Jessica & David</small>
+        </div>
+    </div>
+</section>
+
+{% endblock %}

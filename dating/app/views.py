@@ -1,20 +1,12 @@
-from django.shortcuts import render, redirect
-from .forms import UserCreateForm
-from .models import UserDetails
-from django.contrib.auth import authenticate, login
-from django.contrib import messages
-from django.shortcuts import render, get_object_or_404
-from django.contrib.auth.models import User
-from django.contrib.auth import logout
+from django.shortcuts import render, redirect, get_object_or_404
+from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
-from django.shortcuts import redirect
 from django.views.decorators.http import require_POST
-from .forms import UserDetailsEditForm, ProfileEditForm
-from .models import Like, Match
+from django.contrib import messages
 from django.db.models import Q
-from .forms import MessageForm
-from .models import Message, Notification
-from app.models import Notification
+from django.contrib.auth.models import User
+from .forms import UserCreateForm, UserDetailsEditForm, ProfileEditForm, MessageForm
+from .models import UserDetails, Like, Match, Message, Notification
 
 def index(request):
     unread_count = 0
@@ -70,35 +62,6 @@ def loginPage(request):
         else:
             messages.error(request, "Invalide username or password")
     return render(request, 'login.html')
-
-
-
-# @login_required
-# def profile_view(request, user_id):
-#     user = request.user
-
-#     # Users already liked or disliked
-#     liked_or_disliked_user_ids = Like.objects.filter(from_user=user).values_list('to_user_id', flat=True)
-
-#     # Users matched with current user
-#     matched_user_ids = Match.objects.filter(
-#         Q(user1=user) | Q(user2=user)
-#     ).values_list('user1_id', 'user2_id')
-
-#     # Flatten matched_user_ids tuples and exclude current user id
-#     matched_user_ids_flat = set()
-#     for u1, u2 in matched_user_ids:
-#         if u1 != user.id:
-#             matched_user_ids_flat.add(u1)
-#         if u2 != user.id:
-#             matched_user_ids_flat.add(u2)
-
-#     # Combine all to exclude
-#     exclude_ids = list(set(liked_or_disliked_user_ids) | matched_user_ids_flat | {user.id})
-
-#     profiles = UserDetails.objects.select_related('user').exclude(user__id__in=exclude_ids)
-
-#     return render(request, 'profiles.html', {'profiles': profiles})
 
 
 

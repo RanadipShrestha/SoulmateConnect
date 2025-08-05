@@ -7,7 +7,6 @@ urlpatterns = [
     path("register/", registerPage, name="register"),
     path('profiles/', profiles_view, name='profiles'),
     path('my_profile/', my_profile, name='my_profile'),
-    # path('profile/<int:user_id>/', views.profile_view, name='profile'),
     path('messages/', views.conversations, name='conversations'),
     path('chat/<int:user_id>/', views.chat_view, name='chat_view'),
     path('matches/', views.my_matches, name='my_matches'),
@@ -18,4 +17,5 @@ urlpatterns = [
     path("login/", loginPage, name="login"),
     path('like/<int:user_id>/', views.like_user, name='like_user'),
     path('my-matches/', views.my_matches, name='my_matches'),
+    # path('profile/<int:user_id>/', views.profile_view, name='profile'),
 ]
