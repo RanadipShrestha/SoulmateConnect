@@ -16,7 +16,7 @@ class UserDetails(models.Model):
     GENDER_CHOICES = [
         ('male', "Male"),
         ('female', "Female"),
-        ('other', "other"),
+        ('other...', "other..."),
     ]
     gender = models.CharField(max_length=50, choices=GENDER_CHOICES)
     

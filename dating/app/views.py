@@ -231,3 +231,10 @@ def notifications_view(request):
     notifications = request.user.notifications.order_by('-timestamp')
     request.user.notifications.filter(is_read=False).update(is_read=True)
     return render(request, 'notifications.html', {'notifications': notifications})
+
+    
+
+def mark_as_read(self):
+        self.is_read = True
+        self.save()
+        
