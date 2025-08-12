@@ -7,6 +7,7 @@ from django.db.models import Q
 from django.contrib.auth.models import User
 from .forms import UserCreateForm, UserDetailsEditForm, ProfileEditForm, MessageForm
 from .models import UserDetails, Like, Match, Message, Notification
+from .models import FriendRequest
 
 def index(request):
     unread_count = 0
@@ -124,36 +125,46 @@ def like_user(request, user_id):
     current_user = request.user
 
     if liked_user != current_user:
-        # Create or get the Like
-        like, created = Like.objects.get_or_create(from_user=current_user, to_user=liked_user)
+        # Check if a FriendRequest already exists from current_user to liked_user
+        existing_request = FriendRequest.objects.filter(from_user=current_user, to_user=liked_user).first()
         
-        if created:
-            # Check if liked_user has already liked current_user
-            reciprocal_like_exists = Like.objects.filter(from_user=liked_user, to_user=current_user).exists()
-            
-            if reciprocal_like_exists:
-                # Check if match already exists to avoid duplicates
-                user1, user2 = sorted([current_user, liked_user], key=lambda u: u.id)
-                match, match_created = Match.objects.get_or_create(user1=user1, user2=user2)
+        if not existing_request:
+            # Create a FriendRequest from current_user to liked_user
+            FriendRequest.objects.create(from_user=current_user, to_user=liked_user)
 
-                if match_created:
-                    # Create matched notification for both users
-                    Notification.objects.create(
-                        recipient=current_user,
-                        sender=liked_user,
-                        message=f"You matched with {liked_user.username}!"
-                    )
-                    Notification.objects.create(
-                        recipient=liked_user,
-                        sender=current_user,
-                        message=f"You matched with {current_user.username}!"
-                    )
-            else:
-                # Just notify liked_user about the like
+            # Notify liked_user about the incoming friend request
+            Notification.objects.create(
+                recipient=liked_user,
+                sender=current_user,
+                message=f"{current_user.username} sent you a friend request!"
+            )
+        
+        # Check if reciprocal friend request exists (liked_user -> current_user)
+        reciprocal_request = FriendRequest.objects.filter(from_user=liked_user, to_user=current_user, accepted=False).first()
+        
+        if reciprocal_request:
+            # Auto accept both requests and create a Match
+            reciprocal_request.accepted = True
+            reciprocal_request.save()
+
+            current_request = FriendRequest.objects.get(from_user=current_user, to_user=liked_user)
+            current_request.accepted = True
+            current_request.save()
+
+            user1, user2 = sorted([current_user, liked_user], key=lambda u: u.id)
+            match, created = Match.objects.get_or_create(user1=user1, user2=user2)
+
+            if created:
+                # Notify both users of the match
+                Notification.objects.create(
+                    recipient=current_user,
+                    sender=liked_user,
+                    message=f"You matched with {liked_user.username}!"
+                )
                 Notification.objects.create(
                     recipient=liked_user,
                     sender=current_user,
-                    message=f"{current_user.username} liked you!"
+                    message=f"You matched with {current_user.username}!"
                 )
 
     return redirect('profiles')
@@ -163,19 +174,6 @@ def like_user(request, user_id):
 def logout_view(request):
     logout(request)
     return redirect('index')
-
-@login_required
-def my_matches(request):
-    user = request.user
-    # Get matches where the logged-in user is either user1 or user2
-    matches = Match.objects.filter(user1=user) | Match.objects.filter(user2=user)
-    matched_users = []
-
-    for match in matches:
-        other_user = match.user2 if match.user1 == user else match.user1
-        matched_users.append(other_user)
-
-    return render(request, 'my_matches.html', {'matched_users': matched_users})
 
 
 @login_required
@@ -238,3 +236,76 @@ def mark_as_read(self):
         self.is_read = True
         self.save()
         
+
+@login_required
+def my_matches(request):
+    user = request.user
+
+    # Get matches from the Match table
+    match_objs = Match.objects.filter(Q(user1=user) | Q(user2=user))
+    matched_users = [m.user2 if m.user1 == user else m.user1 for m in match_objs]
+
+    # Incoming pending friend requests
+    incoming_requests = FriendRequest.objects.filter(
+        to_user=user,
+        accepted=False
+    )
+
+    return render(request, "my_matches.html", {
+        "matched_users": matched_users,
+        "incoming_requests": incoming_requests
+    })
+
+from django.views.decorators.http import require_POST
+
+@login_required
+@require_POST
+def accept_request(request, request_id):
+    friend_request = get_object_or_404(FriendRequest, id=request_id, to_user=request.user, accepted=False)
+
+    # Mark friend request as accepted
+    friend_request.accepted = True
+    friend_request.save()
+
+    # Create Match (user1 and user2 sorted by id to avoid duplicates)
+    user1, user2 = sorted([friend_request.from_user, friend_request.to_user], key=lambda u: u.id)
+    Match.objects.get_or_create(user1=user1, user2=user2)
+
+    # Notify both users about the new match
+    Notification.objects.create(
+        recipient=friend_request.from_user,
+        sender=friend_request.to_user,
+        message=f"{friend_request.to_user.username} accepted your friend request!"
+    )
+    Notification.objects.create(
+        recipient=friend_request.to_user,
+        sender=friend_request.from_user,
+        message=f"You accepted {friend_request.from_user.username}'s friend request!"
+    )
+
+    messages.success(request, f"You accepted {friend_request.from_user.username}'s request.")
+    return redirect('my_matches')
+
+
+@login_required
+@require_POST
+def decline_request(request, request_id):
+    friend_request = get_object_or_404(FriendRequest, id=request_id, to_user=request.user, accepted=False)
+    from_username = friend_request.from_user.username
+    friend_request.delete()
+    messages.info(request, f"You declined {from_username}'s request.")
+    return redirect('my_matches')
+
+
+@login_required
+@require_POST
+def remove_match(request, user_id):
+    other_user = get_object_or_404(User, id=user_id)
+
+    Match.objects.filter(
+        Q(user1=request.user, user2=other_user) |
+        Q(user1=other_user, user2=request.user)
+    ).delete()
+
+    messages.success(request, f"You have removed your match with {other_user.username}.")
+    return redirect('my_matches')

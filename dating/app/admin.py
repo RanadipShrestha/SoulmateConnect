@@ -11,4 +11,5 @@ admin.site.register(Like)
 admin.site.register(Match)
 admin.site.register(Message)
 admin.site.register(Notification)
+admin.site.register(FriendRequest)
 

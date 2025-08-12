@@ -17,5 +17,9 @@ urlpatterns = [
     path("login/", loginPage, name="login"),
     path('like/<int:user_id>/', views.like_user, name='like_user'),
     path('my-matches/', views.my_matches, name='my_matches'),
-    # path('profile/<int:user_id>/', views.profile_view, name='profile'),
+    path("matches/", views.my_matches, name="my_matches"),
+    path('accept-request/<int:request_id>/', views.accept_request, name='accept_request'),
+    path('decline-request/<int:request_id>/', views.decline_request, name='decline_request'),
+    path('remove-match/<int:user_id>/', views.remove_match, name='remove_match'),
+
 ]
