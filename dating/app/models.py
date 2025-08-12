@@ -42,25 +42,14 @@ class FAQ(models.Model):
     def __str__(self):
         return self.question
 
-
-from django.db import models
-from django.contrib.auth.models import User
-
-class Like(models.Model):
-    from_user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='liker')
-    to_user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='liked')
+class Message(models.Model):
+    sender = models.ForeignKey(User, related_name='sent_messages', on_delete=models.CASCADE)
+    receiver = models.ForeignKey(User, related_name='received_messages', on_delete=models.CASCADE)
+    content = models.TextField()
     timestamp = models.DateTimeField(auto_now_add=True)
 
     class Meta:
-        unique_together = ('from_user', 'to_user')
+        ordering = ['timestamp']
 
     def __str__(self):
-        return f"{self.from_user} liked {self.to_user}"
-
-class Match(models.Model):
-    user1 = models.ForeignKey(User, on_delete=models.CASCADE, related_name='matches1')
-    user2 = models.ForeignKey(User, on_delete=models.CASCADE, related_name='matches2')
-    timestamp = models.DateTimeField(auto_now_add=True)
-
-    def __str__(self):
-        return f"Match between {self.user1} and {self.user2}"
+        return f'{self.sender.username} to {self.receiver.username}: {self.content}'

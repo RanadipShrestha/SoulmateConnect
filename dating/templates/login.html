@@ -1,102 +1,126 @@
 {% load static %}
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
+  <head>
+    <meta charset="UTF-8" />
     <title>User Login - Find Your Match</title>
     <style>
-        body {
-            background: #ffe6e6;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-        }
-        .login-container {
-            background: #ffffff;
-            padding: 30px;
-            max-width: 500px;
-            margin: 50px auto;
-            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
-            border-radius: 12px;
-        }
-        .login-container h2 {
-            text-align: center;
-            margin-bottom: 20px;
-            color: #d6336c;
-            font-size: 26px;
-        }
-        form {
-            display: flex;
-            flex-direction: column;
-            gap: 20px;
-        }
-        .form-group {
-            display: flex;
-            flex-direction: column;
-        }
-        .form-group label {
-            font-weight: bold;
-            margin-bottom: 6px;
-            color: #333;
-        }
-        .form-group input {
-            padding: 10px;
-            border: 1px solid #ccc;
-            border-radius: 8px;
-            font-size: 15px;
-            background-color: #fafafa;
-            transition: border-color 0.3s ease;
-        }
-        .form-group input:focus {
-            border-color: #d6336c;
-            outline: none;
-        }
-        .submit-btn {
-            background: #d6336c;
-            color: #fff;
-            padding: 14px;
-            border: none;
-            border-radius: 8px;
-            font-size: 18px;
-            cursor: pointer;
-            transition: background 0.3s ease;
-        }
-        .submit-btn:hover {
-            background: #c8235c;
-        }
-        .register-link {
-            text-align: center;
-            margin-top: 10px;
-            font-size: 14px;
-        }
-        .register-link a {
-            color: #d6336c;
-            text-decoration: none;
-            font-weight: bold;
-        }
-        .register-link a:hover {
-            text-decoration: underline;
-        }
+      body {
+        background: #ffe6e6;
+        font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+      }
+      .login-container {
+        background: #ffffff;
+        padding: 30px;
+        max-width: 500px;
+        margin: 50px auto;
+        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+        border-radius: 12px;
+      }
+      .login-container h2 {
+        text-align: center;
+        margin-bottom: 20px;
+        color: #d6336c;
+        font-size: 26px;
+      }
+      form {
+        display: flex;
+        flex-direction: column;
+        gap: 20px;
+      }
+      .form-group {
+        display: flex;
+        flex-direction: column;
+      }
+      .form-group label {
+        font-weight: bold;
+        margin-bottom: 6px;
+        color: #333;
+      }
+      .form-group input {
+        padding: 10px;
+        border: 1px solid #ccc;
+        border-radius: 8px;
+        font-size: 15px;
+        background-color: #fafafa;
+        transition: border-color 0.3s ease;
+      }
+      .form-group input:focus {
+        border-color: #d6336c;
+        outline: none;
+      }
+      .submit-btn {
+        background: #d6336c;
+        color: #fff;
+        padding: 14px;
+        border: none;
+        border-radius: 8px;
+        font-size: 18px;
+        cursor: pointer;
+        transition: background 0.3s ease;
+      }
+      .submit-btn:hover {
+        background: #c8235c;
+      }
+      .register-link {
+        text-align: center;
+        margin-top: 10px;
+        font-size: 14px;
+      }
+      .register-link a {
+        color: #d6336c;
+        text-decoration: none;
+        font-weight: bold;
+      }
+      .register-link a:hover {
+        text-decoration: underline;
+      }
+      .alert {
+        background-color: #ffcccc;
+        color: #a10000;
+        padding: 10px;
+        border-radius: 6px;
+        margin-bottom: 15px;
+        text-align: center;
+      }
     </style>
-</head>
-<body>
+  </head>
+  <body>
+    <div class="login-container">
+      <h2>Login to Your Account</h2>
 
-<div class="login-container">
-    <h2>Login to Your Account</h2>
-    <form method="POST">
+      <!-- Display incorrect login message -->
+      {% if messages %} {% for message in messages %}
+      <div class="alert">{{ message }}</div>
+      {% endfor %} {% endif %}
+
+      <form method="POST">
         {% csrf_token %}
         <div class="form-group">
-            <label>Username</label>
-            <input type="text" name="username" placeholder="Enter username" required>
+          <label>Username</label>
+          <input
+            type="text"
+            name="username"
+            placeholder="Enter username"
+            value="{{ username|default:'' }}"
+            required
+          />
         </div>
         <div class="form-group">
-            <label>Password</label>
-            <input type="password" name="password" placeholder="Enter password" required>
+          <label>Password</label>
+          <input
+            type="password"
+            name="password"
+            placeholder="Enter password"
+            required
+          />
         </div>
         <button type="submit" class="submit-btn">Login</button>
-    </form>
-    <div class="register-link">
-        Don't have an account? <a href="{% url 'register' %}">Register Here</a>
-    </div>
-</div>
+      </form>
 
-</body>
+      <div class="register-link">
+        Don't have an account? <a href="{% url 'register' %}">Register Here</a>
+      </div>
+    </div>
+  </body>
 </html>
