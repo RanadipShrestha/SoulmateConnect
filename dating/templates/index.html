@@ -1,12 +1,28 @@
-{% extends "base.html" %}
-{% load static %}
-{%block content%}
+{% extends "base.html" %} {% load static %} {%block content%}
+<style>
+  .hero-section {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: 80px 20px;
+    height: 100vh;
+
+    background-image: url("{% static 'assets/img/hero-background.webp' %}");
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+  }
+</style>
 <section class="hero-section">
-    {% for home in homes%}
-    <h1>{{home.title}}</h1>
-    <p>{{ home.description }}</p>
-    <a href="{% url 'match' %}" class="cta-btn">Get Started</a>
-    {% endfor %}
+  {% for home in homes%}
+  <h1>{{home.title}}</h1>
+  <p>{{ home.description }}</p>
+  <a href="{% url 'match' %}" class="cta-btn">Get Started</a>
+  {% endfor %}
 </section>
 
 {%endblock%}
