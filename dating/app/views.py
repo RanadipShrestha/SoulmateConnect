@@ -9,8 +9,6 @@ from .forms import UserCreateForm, UserDetailsEditForm, ProfileEditForm, Message
 from .models import UserDetails, Like, Match, Message, Notification
 from .models import FriendRequest
 
-def hello(request):
-    return render('Hello World')
 
 def index(request):
     unread_count = 0
