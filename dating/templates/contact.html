@@ -1,0 +1,59 @@
+{% extends "base.html" %} {% load static %} {% block content %}
+<section class="contact-section">
+  <div class="contact-container">
+    <h1>Contact Us</h1>
+    <p>
+      If you have any questions, suggestions, or just want to say hello, we'd
+      love to hear from you! Fill out the form below and we’ll get back to you
+      as soon as possible.
+    </p>
+
+
+    <div class="faq-section">
+      <h2>Frequently Asked Questions (FAQs)</h2>
+      {% for faq in faqs %}
+      <div class="faq-item">
+        <h3 class="faq-question">{{ faq.question }}</h3>
+        <p class="faq-answer">{{ faq.answer }}</p>
+      </div>
+      {% endfor %}
+    </div>
+
+    <!-- Contact Form -->
+    <form method="post" class="contact-form">
+      {% csrf_token %}
+      <input type="text" name="name" placeholder="Your Name" required />
+      <input type="email" name="email" placeholder="Your Email" required />
+      <input type="text" name="subject" placeholder="Subject" required />
+      <textarea
+        name="message"
+        placeholder="Your Message"
+        rows="6"
+        required
+      ></textarea>
+      <button type="submit">Send Message</button>
+    </form>
+  </div>
+</section>
+<script>
+  const questions = document.querySelectorAll(".faq-question");
+
+  questions.forEach((question) => {
+    question.addEventListener("click", () => {
+      const answer = question.nextElementSibling;
+      const isVisible = answer.style.display === "block";
+
+      // Hide all answers first
+      document
+        .querySelectorAll(".faq-answer")
+        .forEach((ans) => (ans.style.display = "none"));
+
+      // Show clicked answer if it was hidden
+      if (!isVisible) {
+        answer.style.display = "block";
+      }
+    });
+  });
+</script>
+
+{% endblock content %}

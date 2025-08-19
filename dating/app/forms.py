@@ -41,3 +41,4 @@ class UserDetailsEditForm(forms.ModelForm):
             'hobbies': forms.TextInput(attrs={'class': 'form-control'}),
             'gender': forms.Select(attrs={'class': 'form-control'}),
         }
+

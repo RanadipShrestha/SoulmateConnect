@@ -1,4 +1,3 @@
-from django.urls import path
 from django.contrib.auth import views as auth_views
 from .views import *
 from . import views
@@ -18,3 +17,4 @@ urlpatterns = [
     path('remove-match/<int:user_id>/', views.remove_match, name='remove_match'),
 
 ]
+
