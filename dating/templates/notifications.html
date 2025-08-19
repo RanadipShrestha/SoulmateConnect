@@ -1,0 +1,82 @@
+{% extends "base/base.html" %}
+
+{% block content %}
+<style>
+  .notifications-container {
+    max-width: 600px;
+    margin: 2rem auto;
+    padding: 1rem 2rem;
+    background: #f9f9f9;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+  }
+
+  h2 {
+    text-align: center;
+    margin-bottom: 1.5rem;
+    color: #333;
+  }
+
+  ul.notifications-list {
+    list-style: none;
+    padding: 0;
+  }
+
+  ul.notifications-list li {
+    background: white;
+    padding: 1rem;
+    border-radius: 6px;
+    margin-bottom: 1rem;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.1);
+    transition: background-color 0.3s ease;
+  }
+
+  ul.notifications-list li:hover {
+    background-color: #e6f7ff;
+  }
+
+  .notification-sender {
+    font-weight: 600;
+    color: #007bff;
+  }
+
+  .notification-message {
+    margin: 0.3rem 0 0.6rem 0;
+    color: #555;
+  }
+
+  .notification-timestamp {
+    font-size: 0.85rem;
+    color: #999;
+  }
+
+  .back-link {
+    display: block;
+    text-align: center;
+    margin-top: 2rem;
+    font-weight: 500;
+    color: #007bff;
+    text-decoration: none;
+  }
+
+  .back-link:hover {
+    text-decoration: underline;
+  }
+</style>
+
+<div class="notifications-container">
+  <h2>Your Notifications</h2>
+  <ul class="notifications-list">
+    {% for note in notifications %}
+      <li>
+        <div class="notification-sender">{{ note.sender.username }}</div>
+        <div class="notification-message">{{ note.message }}</div>
+        <div class="notification-timestamp">{{ note.timestamp|date:"M d, Y - H:i" }}</div>
+      </li>
+      {%empty%}
+      <li>No notifications to show.</li>
+      {%endfor%}
+  </ul>
+  <a href="{% url 'conversations' %}" class="back-link">← Back to Conversations</a>
+</div>
+{% endblock %}

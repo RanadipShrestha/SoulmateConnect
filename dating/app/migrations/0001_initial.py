@@ -1,0 +1,34 @@
+import django.db.models.deletion
+from django.conf import settings
+from django.db import migrations, models
+
+
+class Migration(migrations.Migration):
+
+    initial = True
+
+    dependencies = [
+        migrations.swappable_dependency(settings.AUTH_USER_MODEL),
+    ]
+
+    operations = [
+        migrations.CreateModel(
+            name='userDetails',
+            fields=[
+                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
+                ('bio', models.TextField()),
+
+
+                ('dob', models.DateField()),
+                ('profile', models.ImageField(upload_to='profile/')),
+                ('city', models.CharField(max_length=255)),
+                ('occupation', models.CharField(max_length=255)),
+                ('education', models.CharField(max_length=255)),
+                ('hobbies', models.CharField(max_length=255)),
+                ('gender', models.CharField(choices=[('male', 'Male'), ('female', 'Female'), ('other', 'other')], max_length=50)),
+
+                ('user', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to=settings.AUTH_USER_MODEL)),
+
+            ],
+        ),
+    ]

@@ -1,0 +1,157 @@
+body {
+    background: #ffe6e6;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    margin: 0;
+    padding: 0;
+}
+
+.hero-section {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: 80px 20px;
+    background: #fff0f5;
+}
+
+.hero-section h1 {
+    font-size: 40px;
+    color: #d6336c;
+    margin-bottom: 20px;
+}
+
+.hero-section p {
+    font-size: 18px;
+    color: #555;
+    max-width: 700px;
+    margin-bottom: 30px;
+}
+
+.cta-btn {
+    background: #d6336c;
+    color: #fff;
+    padding: 15px 30px;
+    border: none;
+    border-radius: 8px;
+    font-size: 18px;
+    text-decoration: none;
+    transition: background 0.3s ease;
+}
+
+.cta-btn:hover {
+    background: #c8235c;
+}
+
+footer {
+    text-align: center;
+    padding: 20px;
+    background: #d6336c;
+    color: #fff;
+    margin-top: 50px;
+}
+
+/* Custom text selection (works across browsers) */
+::selection {
+    background: green;
+    color: white;
+}
+
+::-moz-selection {  /* For Firefox */
+    background: green;
+    color: white;
+}
+
+.chat-container {
+    display: flex;
+    height: calc(100vh - 50px);
+}
+
+.chat-sidebar {
+    width: 250px;
+    background-color: #fff;
+    border-right: 1px solid #ddd;
+    padding: 20px;
+}
+
+.chat-sidebar ul {
+    list-style: none;
+    padding: 0;
+}
+
+.chat-sidebar ul li {
+    margin: 10px 0;
+}
+
+.chat-sidebar ul li a {
+    text-decoration: none;
+    color: #333;
+}
+
+.chat-main {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    padding: 20px;
+}
+
+.chat-messages {
+    flex: 1;
+    overflow-y: auto;
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 8px;
+    margin-bottom: 20px;
+}
+
+.message {
+    margin: 10px 0;
+    padding: 10px;
+    border-radius: 8px;
+}
+
+.message.sent {
+    background-color: #007bff;
+    color: white;
+    margin-left: 20%;
+    text-align: right;
+}
+
+.message.received {
+    background-color: #e9ecef;
+    margin-right: 20%;
+}
+
+.message p {
+    margin: 0;
+}
+
+.message span {
+    font-size: 0.8em;
+    color: #666;
+}
+
+.chat-input {
+    display: flex;
+    gap: 10px;
+}
+
+#message-input {
+    flex: 1;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+}
+
+#send-button {
+    padding: 10px 20px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+#send-button:hover {
+    background-color: #0056b3;
+}
