@@ -10,48 +10,6 @@ from .models import UserDetails, Like, Match, Message, Notification
 from .models import FriendRequest
 
 
-def index(request):
-    unread_count = 0
-    if request.user.is_authenticated:
-        unread_count = Notification.objects.filter(recipient=request.user, is_read=False).count()
-    return render(request, 'index.html', {'unread_count': unread_count})
-
-
-def registerPage(request):
-    if request.method == "POST":
-        form = UserCreateForm(request.POST, request.FILES)
-        if form.is_valid():
-            user = form.save(commit=False)
-            user.first_name = request.POST.get("first_name")
-            user.last_name = request.POST.get("last_name")
-            user.email = request.POST.get("email")
-            user.username = request.POST.get("username")
-            user.save()
-            bio = request.POST.get("bio")
-            dob = request.POST.get("dob")
-            profile = request.FILES.get("profile")
-            city = request.POST.get("city")
-            occupation = request.POST.get("occupation")
-            education = request.POST.get("education")
-            hobbies = request.POST.get("hobbies")
-            gender = request.POST.get("gender") 
-
-            UserDetails.objects.create(
-                user=user,
-                bio=bio,
-                dob=dob,
-                profile=profile,
-                city=city,
-                occupation=occupation,
-                education=education,
-                hobbies=hobbies,
-                gender=gender
-            )
-            return redirect('login')
-    else:
-        form = UserCreateForm()
-    return render(request, 'register.html', {"form": form})
-    
 
 def loginPage(request):
     if request.method == "POST":
@@ -186,17 +144,6 @@ def profile_detail(request, user_id):
         'userdetails': userdetails
     })
 
-
-@login_required
-def conversations(request):
-    user = request.user
-    # Get users matched with the current user
-    matches = Match.objects.filter(Q(user1=user) | Q(user2=user))
-    matched_users = []
-    for match in matches:
-        matched_users.append(match.user2 if match.user1 == user else match.user1)
-
-    return render(request, 'conversations.html', {'matched_users': matched_users})
 
 @login_required
 def chat_view(request, user_id):
