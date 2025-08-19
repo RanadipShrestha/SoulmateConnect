@@ -1,0 +1,301 @@
+<style>
+  .site-header {
+    background: rgba(255, 255, 255, 0.95);
+    backdrop-filter: blur(20px);
+    padding: 1rem 0;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+    border-bottom: 1px solid rgba(226, 232, 240, 0.8);
+  }
+
+  .site-header .container {
+    max-width: 1200px;
+    margin: 0 auto;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 2rem;
+  }
+
+  .site-header .logo {
+    color: #e53e3e;
+    font-size: 1.75rem;
+    font-weight: 800;
+    text-decoration: none;
+    background: linear-gradient(135deg, #e53e3e 0%, #ed64a6 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    transition: all 0.3s ease;
+  }
+
+  .site-header .logo:hover {
+    transform: scale(1.05);
+  }
+
+  .site-header nav ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    gap: 2rem;
+    align-items: center;
+  }
+
+  .site-header nav ul li {
+    display: inline-block;
+    position: relative;
+  }
+
+  .site-header nav ul li a,
+  .site-header nav ul li form button {
+    color: #2d3748;
+    text-decoration: none;
+    font-weight: 600;
+    font-size: 1rem;
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 0.5rem 1rem;
+    border-radius: 0.5rem;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    position: relative;
+  }
+
+  .site-header nav ul li a::before {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    width: 0;
+    height: 2px;
+    background: linear-gradient(135deg, #e53e3e 0%, #ed64a6 100%);
+    transition: all 0.3s ease;
+    transform: translateX(-50%);
+  }
+
+  .site-header nav ul li a:hover,
+  .site-header nav ul li form button:hover {
+    background: rgba(229, 62, 62, 0.1);
+    color: #e53e3e;
+  }
+
+  .site-header nav ul li a:hover::before {
+    width: 100%;
+  }
+
+  .site-header nav ul li a[aria-current="page"] {
+    background: rgba(229, 62, 62, 0.1);
+    color: #e53e3e;
+    font-weight: 700;
+  }
+
+  .site-header nav ul li a[aria-current="page"]::before {
+    width: 100%;
+  }
+
+  .user-initials-link {
+    background: linear-gradient(135deg, #e53e3e 0%, #ed64a6 100%);
+    color: white;
+    font-weight: 700;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border: 2px solid rgba(229, 62, 62, 0.2);
+    box-shadow: 0 2px 8px rgba(229, 62, 62, 0.3);
+    transition: all 0.3s ease;
+  }
+
+  .user-initials-link:hover {
+    transform: scale(1.1);
+    box-shadow: 0 4px 12px rgba(229, 62, 62, 0.4);
+  }
+
+  .notification-badge {
+    background: linear-gradient(135deg, #fbbf24 0%, #f59e0b 100%);
+    color: white;
+    border-radius: 12px;
+    padding: 2px 8px;
+    font-size: 0.75rem;
+    font-weight: 700;
+    position: absolute;
+    top: -8px;
+    right: -8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+    animation: pulse 2s infinite;
+  }
+
+  @keyframes pulse {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.1); }
+  }
+
+  /* Mobile Navigation */
+  .mobile-menu-toggle {
+    display: none;
+    background: none;
+    border: none;
+    font-size: 1.5rem;
+    color: #2d3748;
+    cursor: pointer;
+    padding: 0.5rem;
+    border-radius: 0.5rem;
+    transition: all 0.3s ease;
+  }
+
+  .mobile-menu-toggle:hover {
+    background: rgba(229, 62, 62, 0.1);
+    color: #e53e3e;
+  }
+
+  @media (max-width: 768px) {
+    .site-header .container {
+      padding: 0 1rem;
+    }
+
+    .mobile-menu-toggle {
+      display: block;
+    }
+
+    .site-header nav {
+      position: absolute;
+      top: 100%;
+      left: 0;
+      right: 0;
+      background: rgba(255, 255, 255, 0.98);
+      backdrop-filter: blur(20px);
+      border-top: 1px solid rgba(226, 232, 240, 0.8);
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+      transform: translateY(-100%);
+      opacity: 0;
+      visibility: hidden;
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    .site-header nav.active {
+      transform: translateY(0);
+      opacity: 1;
+      visibility: visible;
+    }
+
+    .site-header nav ul {
+      flex-direction: column;
+      gap: 0;
+      width: 100%;
+      padding: 1rem;
+    }
+
+    .site-header nav ul li {
+      width: 100%;
+      border-bottom: 1px solid rgba(226, 232, 240, 0.5);
+    }
+
+    .site-header nav ul li:last-child {
+      border-bottom: none;
+    }
+
+    .site-header nav ul li a,
+    .site-header nav ul li form button {
+      display: block;
+      padding: 1rem;
+      width: 100%;
+      text-align: left;
+      border-radius: 0;
+    }
+
+    .notification-badge {
+      position: static;
+      display: inline-block;
+      margin-left: 0.5rem;
+    }
+
+    .user-initials-link {
+      margin: 0.5rem 0;
+    }
+  }
+</style>
+
+<header class="site-header">
+  <div class="container">
+    <a href="{% url 'index' %}" class="logo">SoulConnect</a>
+
+    <nav aria-label="Main navigation">
+      <ul>
+        <li>
+          <a href="{% url 'index' %}"
+             {% if request.resolver_match.url_name == 'index' %} aria-current="page"{% endif %}>
+            Home
+          </a>
+        </li>
+
+        {% if user.is_authenticated %}
+          <li>
+            <a href="{% url 'profiles' %}"
+               {% if request.resolver_match.url_name == 'profiles' %} aria-current="page"{% endif %}>
+              Profiles
+            </a>
+          </li>
+
+          <li>
+            <a href="{% url 'my_matches' %}"
+               {% if request.resolver_match.url_name == 'my_matches' %} aria-current="page"{% endif %}>
+              My Matches
+            </a>
+          </li>
+
+          <li>
+            <a href="{% url 'conversations' %}"
+               {% if request.resolver_match.url_name == 'conversations' %} aria-current="page"{% endif %}>
+              Messages
+            </a>
+          </li>
+
+          <li>
+            <a href="{% url 'notifications' %}"
+              {% if request.resolver_match.url_name == 'notifications' %} aria-current="page"{% endif %}>
+              Notifications
+              {% if unread_count > 0 %}
+                <span class="notification-badge">{{ unread_count }}</span>
+              {% endif %}
+            </a>
+          </li>
+
+
+          <li>
+            <form method="POST" action="{% url 'logout' %}">
+              {% csrf_token %}
+              <button type="submit">Logout</button>
+            </form>
+          </li>
+
+          <li>
+            <a href="{% url 'my_profile' %}" 
+               class="user-initials-link" 
+               title="View Profile">
+              {{ user.first_name|default_if_none:""|slice:":1"|upper }}{{ user.last_name|default_if_none:""|slice:":1"|upper }}
+            </a>
+          </li>
+
+        {% else %}
+          <li>
+            <a href="{% url 'login' %}"
+               {% if request.resolver_match.url_name == 'login' %} aria-current="page"{% endif %}>
+              Login
+            </a>
+          </li>
+          <li>
+            <a href="{% url 'register' %}"
+               {% if request.resolver_match.url_name == 'register' %} aria-current="page"{% endif %}>
+              Register
+            </a>
+          </li>
+        {% endif %}
+      </ul>
+    </nav>
+  </div>
+</header>

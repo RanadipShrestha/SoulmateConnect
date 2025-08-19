@@ -1,0 +1,62 @@
+{% extends 'base/base.html' %}
+{% block content %}
+<style>
+  .matches-container {
+    max-width: 600px;
+    margin: 2rem auto;
+  }
+
+  .matches-container h2 {
+    text-align: center;
+    margin-bottom: 1.5rem;
+    color: #d6336c;
+  }
+
+  .match-list {
+    list-style: none;
+    padding: 0;
+  }
+
+  .match-list li {
+    background: #fff;
+    border: 1px solid #ddd;
+    border-radius: 12px;
+    margin-bottom: 12px;
+    padding: 15px 20px;
+    transition: background-color 0.3s ease;
+  }
+
+  .match-list li a {
+    text-decoration: none;
+    color: #333;
+    font-weight: 600;
+    font-size: 1.1rem;
+    display: block;
+  }
+
+  .match-list li:hover {
+    background-color: #f8d7e0;
+  }
+
+  .no-matches {
+    text-align: center;
+    color: #999;
+    font-style: italic;
+  }
+</style>
+
+<div class="matches-container">
+  <h2>Your Matches</h2>
+  <ul class="match-list">
+    {% for user in matched_users %}
+      <li>
+        <a href="{% url 'chat_view' user.id %}">
+          {{ user.username }}
+        </a>
+      </li>
+    {% empty %}
+      <li class="no-matches">You have no matches yet. Keep swiping!</li>
+    {% endfor %}
+  </ul>
+</div>
+{% endblock %}

@@ -1,0 +1,160 @@
+{% extends "base/base.html" %}
+
+{% block content %}
+<h1 class="page-title">My Matches</h1>
+
+<div class="matches-container">
+    {% if matched_users %}
+        {% for user in matched_users %}
+            <div class="match-card">
+                <div class="match-image">
+                    <img src="{{ user.userdetails.profile.url }}" alt="{{ user.username }}'s profile picture" onerror="this.src='/static/images/default-profile.png';">
+                </div>
+                <div class="match-info">
+                    <h3>{{ user.username }}</h3>
+                    <p>{{ user.userdetails.bio|default:"No bio provided." }}</p>
+                </div>
+                <form method="post" action="{% url 'remove_match' user.id %}" onsubmit="return confirm('Are you sure you want to remove this match?');">
+                    {% csrf_token %}
+                    <button type="submit" class="remove-btn">Remove Match</button>
+                </form>
+            </div>
+        {% endfor %}
+    {% else %}
+        <p class="no-matches">You have no matches yet.</p>
+    {% endif %}
+</div>
+
+<hr style="margin: 2rem 0;">
+
+<h2 class="page-title">Requests From Others</h2>
+
+<div class="matches-container">
+    {% if incoming_requests %}
+        {% for request in incoming_requests %}
+            <div class="match-card">
+                <div class="match-image">
+                    <img src="{{ request.from_user.userdetails.profile.url }}" alt="{{ request.from_user.username }}'s profile picture" onerror="this.src='/static/images/default-profile.png';">
+                </div>
+                <div class="match-info">
+                    <h3>{{ request.from_user.username }}</h3>
+                    <p>{{ request.from_user.userdetails.bio|default:"No bio provided." }}</p>
+                </div>
+                <div class="request-actions">
+                    <form method="post" action="{% url 'accept_request' request.id %}">
+                        {% csrf_token %}
+                        <button type="submit" class="accept-btn">Accept</button>
+                    </form>
+                    <form method="post" action="{% url 'decline_request' request.id %}" onsubmit="return confirm('Are you sure you want to decline this request?');">
+                        {% csrf_token %}
+                        <button type="submit" class="decline-btn">Decline</button>
+                    </form>
+                </div>
+            </div>
+        {% endfor %}
+    {% else %}
+        <p class="no-matches">No new requests at the moment.</p>
+    {% endif %}
+</div>
+
+<style>
+.page-title {
+    font-size: 2rem;
+    margin-bottom: 1.5rem;
+    text-align: center;
+}
+
+.matches-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    gap: 1.5rem;
+    padding: 1rem;
+}
+
+.match-card {
+    background-color: #f9f9f9;
+    border-radius: 12px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+    padding: 1rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    transition: transform 0.2s ease;
+}
+
+.match-card:hover {
+    transform: translateY(-5px);
+}
+
+.match-image img {
+    width: 100px;
+    height: 100px;
+    object-fit: cover;
+    border-radius: 50%;
+    margin-bottom: 0.75rem;
+}
+
+.match-info h3 {
+    margin: 0.5rem 0 0.25rem;
+}
+
+.match-info p {
+    font-size: 0.9rem;
+    color: #444;
+}
+
+.no-matches {
+    text-align: center;
+    font-style: italic;
+    color: #666;
+}
+
+.remove-btn, .accept-btn, .decline-btn {
+    border: none;
+    padding: 0.4rem 1rem;
+    border-radius: 6px;
+    cursor: pointer;
+    margin: 0.3rem;
+    font-size: 0.9rem;
+    font-weight: 600;
+    min-width: 100px;
+    transition: background-color 0.2s ease;
+}
+
+/* Remove Match */
+.remove-btn {
+    background-color: #ff4d4d;
+    color: white;
+}
+.remove-btn:hover {
+    background-color: #e60000;
+}
+
+/* Accept */
+.accept-btn {
+    background-color: #4CAF50;
+    color: white;
+}
+.accept-btn:hover {
+    background-color: #3e8e41;
+}
+
+/* Decline */
+.decline-btn {
+    background-color: #ccc;
+    color: #333;
+}
+.decline-btn:hover {
+    background-color: #999;
+}
+
+.request-actions {
+    display: flex;
+    gap: 0.75rem;
+    justify-content: center;
+    margin-top: 0.5rem;
+    flex-wrap: wrap;
+}
+</style>
+{% endblock %}

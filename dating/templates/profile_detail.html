@@ -1,0 +1,84 @@
+{% extends "base/base.html" %}
+
+{% block content %}
+<h1 class="page-title">{{ user.username }}'s Profile</h1>
+
+<div class="profile-wrapper">
+    <div class="profile-card">
+        <div class="profile-image">
+            <img src="{{ userdetails.profile.url }}" alt="{{ user.username }}'s profile picture" onerror="this.src='/static/images/default-profile.png';">
+        </div>
+        <div class="profile-details">
+            <ul>
+                <li><span>Bio:</span> {{ userdetails.bio|default:"No bio provided." }}</li>
+                <li><span>City:</span> {{ userdetails.city }}</li>
+                <li><span>Occupation:</span> {{ userdetails.occupation }}</li>
+                <li><span>Education:</span> {{ userdetails.education }}</li>
+                <li><span>Hobbies:</span> {{ userdetails.hobbies }}</li>
+                <li><span>Gender:</span> {{ userdetails.get_gender_display }}</li>
+                <li><span>Date of Birth:</span> {{ userdetails.dob|date:"F j, Y" }}</li>
+            </ul>
+        </div>
+    </div>
+</div>
+
+<style>
+.page-title {
+    text-align: center;
+    font-size: 2.5rem;
+    margin: 2rem 0 1.5rem;
+    color: #333;
+}
+
+.profile-wrapper {
+    display: flex;
+    justify-content: center;
+    padding: 0 1rem;
+}
+
+.profile-card {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    max-width: 600px;
+    width: 100%;
+    background: #fff;
+    border-radius: 16px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+    padding: 2rem;
+    transition: transform 0.3s ease;
+}
+
+.profile-card:hover {
+    transform: translateY(-5px);
+}
+
+.profile-image img {
+    width: 140px;
+    height: 140px;
+    object-fit: cover;
+    border-radius: 50%;
+    border: 4px solid #eee;
+    margin-bottom: 1.5rem;
+}
+
+.profile-details ul {
+    list-style: none;
+    padding: 0;
+    width: 100%;
+}
+
+.profile-details li {
+    margin-bottom: 1rem;
+    font-size: 1rem;
+    color: #555;
+}
+
+.profile-details span {
+    display: inline-block;
+    width: 140px;
+    font-weight: 600;
+    color: #222;
+}
+</style>
+{% endblock %}
